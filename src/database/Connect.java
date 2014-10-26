@@ -1,6 +1,5 @@
 package database;
 import java.sql.*;
-import javax.sql.*;
 
 public class Connect {
 
@@ -8,13 +7,6 @@ public class Connect {
 	String user = "cpc455";
 	String password = "tispipru";
 	Connection dbConn = null;
-	static Connect hello = null;
-	
-	public static void main(String args[]) {
-		hello = new Connect();
-	}
-	
-	
 	
 	public Connect()
 	{
@@ -56,5 +48,4 @@ public class Connect {
 		return dbConn;
 	}
 	
-
 }
