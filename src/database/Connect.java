@@ -3,10 +3,10 @@ import java.sql.*;
 
 public class Connect {
 
-	String dbName = "jdbc:postgresql://dbteach2.cs.bham.ac.uk/cpc455";
-	String user = "cpc455";
-	String password = "tispipru";
-	Connection dbConn = null;
+	private String dbName = "jdbc:postgresql://dbteach2.cs.bham.ac.uk/cpc455";
+	private String user = "cpc455";
+	private String password = "tispipru";
+	private Connection dbConn = null;
 	
 	public Connect()
 	{
