@@ -23,7 +23,6 @@ public class Connect {
 			dbConn = DriverManager.getConnection(dbName, user, password);
 		}
 		catch (SQLException ex) {
-			System.out.println("hello olleh");
 			ex.printStackTrace();	
 		}
 		

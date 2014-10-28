@@ -45,21 +45,20 @@ public class PopulateTables {
 		for(int i = 0; i < 500; i++) {
 			System.out.println(i);
 			switch(i) {
-				case 0: sql = "INSERT INTO Student (titleID, forename, familyName, dateOfBirth) VALUES (1, 'Connor', 'Cartwright', '1995-08-24');"; break;
+				case 0: sql = "INSERT INTO Student (titleID, forename, familyName, dateOfBirth) VALUES (1, 'Connor', 'Cartwright', '19950824');"; break;
 				case 1: sql = "INSERT INTO Student (titleID, forename, familyName, dateOfBirth) VALUES (3, 'Helen', 'Crump', '1994-11-02');"; break; 
 				case 2: sql = "INSERT INTO Student (titleID, forename, familyName, dateOfBirth) VALUES (1, 'Liam', 'Smith', '1994-09-11');"; break; 
 				case 3: sql = "INSERT INTO Student (titleID, forename, familyName, dateOfBirth) VALUES (1, 'Alexandros', 'Hamilakis', '1995-08-12');"; break; 
 				case 4: sql = "INSERT INTO Student (titleID, forename, familyName, dateOfBirth) VALUES (1, 'Michael', 'Dewsbury', '1995-08-18');"; break; 
-				case 5: sql = "INSERT INTO Student (titleID, forename, familyName, dateOfBirth) VALUES (3, 'Gina', 'O'Connor', '1995-01-30');"; break; 
+				case 5: sql = "INSERT INTO Student (titleID, forename, familyName, dateOfBirth) VALUES (3, 'Gina', 'OConnor', '1995-01-30');"; break; 
 				case 6: sql = "INSERT INTO Student (titleID, forename, familyName, dateOfBirth) VALUES (3, 'Abigail', 'Callaghan', '1994-09-20');"; break; 
 				case 7: sql = "INSERT INTO Student (titleID, forename, familyName, dateOfBirth) VALUES (1, 'Daniel', 'Rowland', '1994-09-29');"; break; 
 				case 8: sql = "INSERT INTO Student (titleID, forename, familyName, dateOfBirth) VALUES (2, 'Laura', 'White', '1995-06-24');"; break; 
 				case 9: sql = "INSERT INTO Student (titleID, forename, familyName, dateOfBirth) VALUES (1, 'Liam', 'Tierney', '1995-02-09');"; break; 
 				case 10: sql = "INSERT INTO Student (titleID, forename, familyName, dateOfBirth) VALUES (1, 'John', 'Barnard', '1994-12-28');"; break; 
-				default: sql = "INSERT INTO Student (titleID, forename, familyName, dateOfBirth) VALUES ("
-									+ RandomName.getTitle() + ", " + RandomName.getForename() + ", " + RandomName.getSurname() + ", '2000-01-01'"; break;
+				default: sql = "INSERT INTO Student (titleID, forename, familyName, dateOfBirth) VALUES (" + RandomName.getTitle() + ", '" + RandomName.getForename() + "', '" + RandomName.getSurname() + "', '2000-01-01');"; break;
 			}
-			
+
 			try {
 				stmt.executeUpdate(sql); // execute INSERT statements
 				System.out.println("Populated Student Table: " + sql);
