@@ -227,7 +227,7 @@ public class RandomName {
 	}
 	
 	public static int getTitle() {
-		return(new Random().nextInt(6 - 1) + 1);
+		return(new Random().nextInt(7 - 1) + 1);
 	}
 
 	//==========================================================================
