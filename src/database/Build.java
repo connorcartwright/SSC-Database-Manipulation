@@ -15,7 +15,6 @@ public class Build {
 		connect = new Connect();
 		dbConn = connect.getConnection();
 		createTables = new BuildTables(dbConn);
-		createTables.createTables();
 		createTables.clearDatabase();
 	}
 	

@@ -225,6 +225,10 @@ public class RandomName {
 	public static String getSurname() {
 		return SURNAMES[(new Random()).nextInt(SURNAMES.length)];
 	}
+	
+	public static int getTitle() {
+		return(new Random().nextInt(6 - 1) + 1);
+	}
 
 	//==========================================================================
 

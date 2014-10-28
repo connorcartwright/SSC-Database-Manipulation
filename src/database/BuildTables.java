@@ -15,20 +15,23 @@ public class BuildTables {
 	private String createTypes = "CREATE TABLE Types (typeID SERIAL PRIMARY KEY, typeString varchar(20) UNIQUE NOT NULL);";
 	// connection object
 	private Connection dbConn;
+	private PopulateTables populateTables;
 
 	public BuildTables(Connection dbConn) {
 		this.dbConn = dbConn;
+		createTables();
+		populateTables = new PopulateTables(dbConn);
 	}
 	
-	public void createTables() {
+	private void createTables() {
 		createTitlesTable();
-		createStudentTable();
-		createLecturerTable();
-		createModuleTable();
 		createTypesTable();
-		createMarksTable();
+		createStudentTable();
 		createStudentContactTable();
 		createNextOfKinTable();
+		createLecturerTable();
+		createModuleTable();
+		createMarksTable();
 	}
 	
 	private void createLecturerTable() {
@@ -41,7 +44,7 @@ public class BuildTables {
 			e.printStackTrace();
 		}			
 	}
-	
+
 	private void createMarksTable() {
 		try {
 			PreparedStatement stmt = dbConn.prepareStatement(createMarks);
