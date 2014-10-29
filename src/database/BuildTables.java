@@ -13,17 +13,17 @@ public class BuildTables {
 	private String createStudentContact = "CREATE TABLE StudentContact (studentID int REFERENCES Student ON DELETE CASCADE, eMailAddress varchar(50) NOT NULL, postalAddress varchar(10) NOT NULL)";
 	private String createTitles = "CREATE TABLE Titles (titleID SERIAL PRIMARY KEY, titleString varchar(20) UNIQUE NOT NULL);";
 	private String createTypes = "CREATE TABLE Types (typeID SERIAL PRIMARY KEY, typeString varchar(20) UNIQUE NOT NULL);";
+	// string to drop tables
+	private String dropTables = "DROP TABLE Lecturer, Titles, Marks, Module, NextOfKinContact, Types, Student, StudentContact CASCADE;";
 	// connection object
 	private Connection dbConn;
 	private PopulateTables populateTables;
 
 	public BuildTables(Connection dbConn) {
 		this.dbConn = dbConn;
-		createTables();
 		populateTables = new PopulateTables(dbConn);
 	}
-	
-	private void createTables() {
+	public void createTables() {
 		createTitlesTable();
 		createTypesTable();
 		createStudentTable();
@@ -32,6 +32,10 @@ public class BuildTables {
 		createLecturerTable();
 		createModuleTable();
 		createMarksTable();
+	}
+	
+	public void populateTables() {
+		populateTables.populateTables();
 	}
 	
 	private void createLecturerTable() {
@@ -124,32 +128,13 @@ public class BuildTables {
 	}
 
 	public void clearDatabase() {
-		String sql = "";
-		Statement stmt = null;
 		 try {
-			stmt = dbConn.createStatement();
-		} catch (SQLException e) {
+			PreparedStatement stmt = dbConn.prepareStatement(dropTables);
+			stmt.execute();
+			System.out.println("Dropped all tables!");
+		} 
+		catch (SQLException e) {
 			e.printStackTrace();
-		}
-		// this loop executes the DROP TABLE statements one at a time
-		for (int i = 0; i < 8; i++) {
-			switch(i) {
-			case 0: sql = "DROP TABLE Lecturer CASCADE"; break;
-			case 1: sql = "DROP TABLE Titles CASCADE"; break;
-			case 2: sql = "DROP TABLE Marks CASCADE"; break;
-			case 3: sql = "DROP TABLE Module CASCADE"; break;
-			case 4: sql = "DROP TABLE NextOfKinContact CASCADE"; break;
-			case 5: sql = "DROP TABLE Types CASCADE"; break;
-			case 6: sql = "DROP TABLE Student CASCADE"; break;
-			case 7: sql = "DROP TABLE StudentContact CASCADE"; break;
-			}
-				
-			try {
-				stmt.executeUpdate(sql); // execute DROP statements
-				System.out.println(sql + "executed.");
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}	
 		}
 	}
 		
