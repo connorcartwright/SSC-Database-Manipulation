@@ -44,22 +44,20 @@ public class PopulateTables {
 				default: sql += "(5, '" + RandomName.getForename() + "', '" + RandomName.getSurname() + "'), "; break;
 			}
 		}
-		System.out.println(sql);
 		executeStatement("Lecturer", sql);
 	}
 	
 	private void populateMarksTable() {
-		 for(int i = 0; i < 100; i++) {
+		 for(int i = 0; i < 115; i++) {
 			 switch(i) {
 				 case 0: sql = "INSERT INTO Marks (studentID, moduleID, year, typeID, mark) VALUES (1, 1, 2014, 1, 99), (1, 2, 2014, 1, 98), "
 				 		+ "(1, 3, 2014, 1, 89), (1, 4, 2014, 1, 73), (1, 5, 2014, 1, 75), (1, 2, 2014, 1, 98), (2, 1, 2014, 1, 94), (2, 2, 2014, 1, 99), "
 				 		+ "(3, 1, 2014, 1, 56), (4, 1, 2014, 1, 75), (5, 1, 2014, 1, 63), (6, 1, 2014, 1, 33), (7, 1, 2014, 1, 41), (8, 1, 2014, 1, 39), "
 				 		+ "(9, 1, 2014, 1, 88), (10, 1, 2014, 1, 63), (11, 1, 2014, 1, 67), "; break;
-				 case 99:  sql += "(" + (i + 11) + ", 1, 2014, " + (rand.nextInt(3) + 1) + ", " + (rand.nextInt(100) + 1) + ");"; break;
-				 default: sql += "(" + (i + 11) + ", 1, 2014, " + (rand.nextInt(3) + 1) + ", " + (rand.nextInt(100) + 1) + "), "; break;
+				 case 114:  sql += "(" + (i + 11) + ", " + (rand.nextInt(50) + 1) + ", 2014, " + (rand.nextInt(3) + 1) + ", " + (rand.nextInt(100) + 1) + ");"; break;
+				 default: sql += "(" + (i + 11) + ", " + (rand.nextInt(50) + 1) + ", 2014, " + (rand.nextInt(3) + 1) + ", " + (rand.nextInt(100) + 1) + "), "; break;
 			 }		 
 		 }
-		 System.out.println(sql);
 		 executeStatement("Marks", sql);	
 	}
 
@@ -73,7 +71,6 @@ public class PopulateTables {
 				default: sql += "('Module" + (i + 5) + "', 'Generic Description', '9'), "; break;
 			}
 		}
-		System.out.println(sql);
 		executeStatement("Module", sql);	
 	}
 	

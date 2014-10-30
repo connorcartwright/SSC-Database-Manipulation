@@ -21,6 +21,7 @@ public class Connect {
 		
 		try {
 			dbConn = DriverManager.getConnection(dbName, user, password);
+			dbConn.setAutoCommit(false);
 		}
 		catch (SQLException ex) {
 			ex.printStackTrace();	

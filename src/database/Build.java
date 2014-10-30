@@ -15,8 +15,46 @@ public class Build {
 		connect = new Connect();
 		dbConn = connect.getConnection();
 		createTables = new BuildTables(dbConn);
-		createTables.createTables();
-		createTables.populateTables();
-		createTables.clearDatabase();
 	}
+	
+	public void createTables() {
+		createTables.createTables();
+		try {
+			dbConn.commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void populateTables() {
+		createTables.populateTables();
+		try {
+			dbConn.commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void clearDatabase() {
+		createTables.clearDatabase();
+		try {
+			dbConn.commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void addNewStudent(int titleID, String forename, String familyName, String dob) {
+		String newStudent = "INSERT INTO Student (titleID, forename, familyName, dateOfBirth) VALUES (" + titleID + ", '" + forename + "', '" + familyName + "', '" + dob + "');"; 	
+		try {
+			PreparedStatement stmt = dbConn.prepareStatement(newStudent);
+			stmt.execute();
+			System.out.println("Added new student: " + forename + " " + familyName);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
 }
