@@ -17,22 +17,24 @@ import database.Build;
 public class GUI {
 	
 	private JFrame mainFrame; // the mainframe/backbone of the GUI
-	private JTextArea moduleTranscript, studentTranscript; // text areas for the Student Transcript and moduleTrancsript
+	private JTextArea moduleTranscript, studentTranscript; // text areas for the Student Transcript and moduleTranscript
 	private String[] titles = { "Mr", "Mrs", "Miss", "Ms", "Dr", "Madam" }; // add more titles here when needed in the future
+	private String[] type = { "Sit", "Resit", "Repeat" }; // add more types in here when needed in the future
+	private Integer[] mark = new Integer[101]; { for(int i = 0; i < 101; i++) { mark[i] = i; } };
 	private static final int padding = 5; // blank space for layout management
 	private Component errorFrame; // used when producing the error message
 	private boolean tablesCreatedPopulated, registerStudentOpen, markStudentOpen, moduleTranscriptOpen, studentTranscriptOpen = false; // initialising so that we know whether the frames are open
-	private static Build build;
+	private Build build;
 	
 	
 	
 	public static void main(String[] args) {
 		@SuppressWarnings("unused")
 		final GUI gui = new GUI();
-		build = new Build();
 	}
 
 	public GUI() {
+		build = new Build();
 		// Step 1: create the components
 		JButton createPopulate = new JButton("Create & Populate Tables");
 		JButton clearDatabase = new JButton("Clear Database");
@@ -183,11 +185,10 @@ public class GUI {
 	
 	public void registerStudent() {
 		registerStudentOpen = true;
-		final String registerStudentString = "RegisterStudentFrame"; // Used to find client property
 		
 		// Step 1: create the components
 		final JFrame registerStudentFrame = new JFrame("Register a new Student");
-		JComboBox titleCombo = new JComboBox<String>(titles); // initialising the combo box
+		JComboBox<String> titleCombo = new JComboBox<String>(titles); // initialising the combo box
 		
 		JButton addStudentButton = new JButton("Add Student");
 		JButton closeButton = new JButton("Close");
@@ -206,7 +207,6 @@ public class GUI {
 		
 		// Step 2: Set the properties of the components
 		addStudentButton.setToolTipText("Add a new Student to the database");
-		closeButton.putClientProperty(registerStudentString, registerStudentFrame);
 		closeButton.setToolTipText("Close this window.");
 		
 		forenameInput.setColumns(16);
@@ -278,9 +278,7 @@ public class GUI {
 		// Step 6: Arrange to handle events in the user interface
 		closeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JComponent c = (JComponent) e.getSource();
-				JFrame f = (JFrame) c.getClientProperty(registerStudentString);
-				f.dispose(); // close the window and switch focus back to the mainframe
+				registerStudentFrame.dispose(); // close the window and switch focus back to the mainframe
 				registerStudentOpen = false; // the frame is no longer open
 			}
 		});
@@ -311,8 +309,30 @@ public class GUI {
 							"Bad date.", JOptionPane.ERROR_MESSAGE);
 				}
 				else {
+					System.out.println(dateInput.getText());
+					try {
+					build.addNewStudent((titleCombo.getSelectedIndex()+1), forenameInput.getText(), surnameInput.getText(), dateInput.getText());
 					
+					registerStudentFrame.dispose(); // close the frame
+					registerStudentOpen = false; // the frame is no longer open
+					
+					JOptionPane.showMessageDialog(errorFrame, // then show an informative error message
+							("Student " + forenameInput.getText() + " " + surnameInput.getText() + " has been added!"),
+							"New Student added", JOptionPane.INFORMATION_MESSAGE);
+					}
+					catch (Exception e1) {
+						JOptionPane.showMessageDialog(errorFrame, // then show an informative error message
+								"Failed to add new Student!",
+								"Failed to add new Student!", JOptionPane.ERROR_MESSAGE);
+						System.out.println("Failed to add new Student!");
+					}
 				}
+			}
+		});
+		
+		registerStudentFrame.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				registerStudentOpen = false; // the frame is no longer open
 			}
 		});
 		
@@ -320,18 +340,189 @@ public class GUI {
 		registerStudentFrame.pack(); // pack the report frame
 		centreWindow(registerStudentFrame); // centre the report frame
 		registerStudentFrame.setVisible(true); // and make it visible
-		
-		
-		// Title
-		// Forename
-		// Surname
-		// DOB
-		
-		// check the length of each string to make sure it abides by the standards
 	}
 	
 	public void markStudent() {
-		// code to display and mark student
+		markStudentOpen = true;
+		String[] students = build.getAllStudents();
+		
+		String [] modules = build.getAllModules();
+		
+		// Step 1: create the components
+		final JFrame markStudentFrame = new JFrame("Add Marks for a Student");
+		JButton addMarkButton = new JButton("Add Mark");
+		JButton closeButton = new JButton("Close");
+		
+		JComboBox<String> studentCombo = new JComboBox<String>(students); // initialising the combo box
+		JComboBox<String> moduleCombo = new JComboBox<String>(modules); // initialising the combo box
+		JComboBox<Integer> markCombo = new JComboBox<Integer>(mark); // initialising the combo box
+		JTextField yearInput = new JTextField();
+		JComboBox<String> typeCombo = new JComboBox<String>(type); // initialising the combo box
+		JTextArea notesInput = new JTextArea();
+		
+		JLabel studentLabel = new JLabel("Student: ");
+		JLabel moduleLabel = new JLabel("Module: ");
+		JLabel markLabel = new JLabel("Mark: ");
+		JLabel yearLabel = new JLabel("Year: ");
+		JLabel typeLabel = new JLabel("Type: ");
+		JLabel notesLabel = new JLabel("Notes: ");
+		
+		// Step 2: Set the properties of the components
+		addMarkButton.setToolTipText("Add a new Student to the database");
+		closeButton.setToolTipText("Close this window.");
+		markCombo.setPreferredSize(new Dimension(60, 34));
+		notesInput.setBorder(BorderFactory.createLineBorder(Color.BLUE, 1));
+		
+		yearInput.setColumns(8);
+		notesInput.setColumns(20);
+		notesInput.setRows(4);
+		
+		// Step 3: Create containers to hold the components
+		markStudentFrame.setPreferredSize(new Dimension(320, 390));
+		markStudentFrame.setResizable(false); // make it so the frame can't be resized
+		markStudentFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE); // setting default close operation
+		
+		JPanel contentPanel = new JPanel();
+		JPanel topContentPanel = new JPanel();
+		JPanel bottomContentPanel = new JPanel();
+		
+		JPanel topTopPanel = new JPanel();
+		JPanel topBottomPanel = new JPanel();
+		
+		JPanel bottomTopPanel = new JPanel();
+		JPanel bottomBottomPanel = new JPanel();
+		
+		JPanel studentPanel = new JPanel();
+		JPanel modulePanel = new JPanel();
+		JPanel markPanel = new JPanel();
+		JPanel yearPanel = new JPanel();
+		JPanel typePanel = new JPanel();
+		JPanel notesPanel = new JPanel();
+		JPanel buttonPanel = new JPanel();
+		
+		// Step 4: Specify LayoutManagers
+		markStudentFrame.getContentPane().setLayout(new BorderLayout()); // setting the layout for the report frame
+		((JComponent) markStudentFrame.getContentPane()).setBorder(new EmptyBorder(padding, padding, padding, padding));
+		
+		contentPanel.setLayout(new BorderLayout()); // setting the layout for the panel holding the text
+		contentPanel.setBorder(new EmptyBorder(padding, padding, padding, padding));
+		topContentPanel.setLayout(new BorderLayout()); // setting the layout for the panel holding the text
+		topContentPanel.setBorder(new EmptyBorder(padding, padding, padding, padding));
+		bottomContentPanel.setLayout(new BorderLayout()); // setting the layout for the panel holding the text
+		bottomContentPanel.setBorder(new EmptyBorder(padding, padding, padding, padding));
+		topTopPanel.setLayout(new BorderLayout()); // setting the layout for the panel holding the text
+		topTopPanel.setBorder(new EmptyBorder(padding, padding, padding, padding));
+		topBottomPanel.setLayout(new BorderLayout()); // setting the layout for the panel holding the text
+		topBottomPanel.setBorder(new EmptyBorder(padding, padding, padding, padding));
+		bottomTopPanel.setLayout(new BorderLayout()); // setting the layout for the panel holding the text
+		bottomTopPanel.setBorder(new EmptyBorder(padding, padding, padding, padding));
+		bottomBottomPanel.setLayout(new BorderLayout()); // setting the layout for the panel holding the text
+		bottomBottomPanel.setBorder(new EmptyBorder(padding, padding, padding, padding));
+		
+		// Step 5: Add components to containers
+		studentPanel.add(studentLabel, BorderLayout.WEST);
+		studentPanel.add(studentCombo, BorderLayout.EAST);
+		
+		modulePanel.add(moduleLabel, BorderLayout.WEST);
+		modulePanel.add(moduleCombo, BorderLayout.WEST);
+		
+		markPanel.add(markLabel, BorderLayout.WEST);
+		markPanel.add(markCombo, BorderLayout.EAST);
+		
+		yearPanel.add(yearLabel, BorderLayout.WEST);
+		yearPanel.add(yearInput, BorderLayout.EAST);
+		
+		typePanel.add(typeLabel, BorderLayout.WEST);
+		typePanel.add(typeCombo, BorderLayout.EAST);
+		
+		notesPanel.add(notesLabel, BorderLayout.WEST);
+		notesPanel.add(notesInput, BorderLayout.EAST);
+		
+		buttonPanel.add(addMarkButton, BorderLayout.WEST);
+		buttonPanel.add(closeButton, BorderLayout.EAST);
+		
+		topTopPanel.add(studentPanel, BorderLayout.NORTH);
+		topTopPanel.add(modulePanel, BorderLayout.SOUTH);
+		topBottomPanel.add(markPanel, BorderLayout.NORTH);
+		topBottomPanel.add(yearPanel, BorderLayout.SOUTH);
+		bottomTopPanel.add(typePanel, BorderLayout.NORTH);
+		bottomTopPanel.add(notesPanel, BorderLayout.SOUTH);
+		bottomBottomPanel.add(buttonPanel, BorderLayout.CENTER);
+		
+		topContentPanel.add(topTopPanel, BorderLayout.NORTH);
+		topContentPanel.add(topBottomPanel, BorderLayout.SOUTH);
+		bottomContentPanel.add(bottomTopPanel, BorderLayout.NORTH);
+		bottomContentPanel.add(bottomBottomPanel, BorderLayout.SOUTH);
+		
+		contentPanel.add(topContentPanel, BorderLayout.NORTH);
+		contentPanel.add(bottomContentPanel, BorderLayout.SOUTH);
+		
+		markStudentFrame.getContentPane().add(contentPanel, BorderLayout.CENTER);
+		
+		// Step 6: Arrange to handle events in the user interface
+		closeButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				markStudentFrame.dispose(); // close the window and switch focus back to the mainframe
+				markStudentOpen = false; // the frame is no longer open
+			}
+		});
+		
+		addMarkButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int year = 0;
+				try {
+				year = Integer.parseInt(yearInput.getText());
+				}
+				catch (Exception e1) {
+					JOptionPane.showMessageDialog(errorFrame, // then show an informative error message
+							"Invalid Year entered.",
+							"Invalid Year", JOptionPane.ERROR_MESSAGE);	
+				}
+				if(studentCombo.getSelectedIndex() < 1) {
+					JOptionPane.showMessageDialog(errorFrame, // then show an informative error message
+							"No Student Selected.",
+							"No Student", JOptionPane.ERROR_MESSAGE);	
+				}
+				else if(moduleCombo.getSelectedIndex() < 1) {
+					JOptionPane.showMessageDialog(errorFrame, // then show an informative error message
+							"No Module Selected.",
+							"No Module", JOptionPane.ERROR_MESSAGE);	
+				}
+				else if(year > 2014 || year < 1980) {
+					JOptionPane.showMessageDialog(errorFrame, // then show an informative error message
+							"Invalid Year entered.",
+							"Invalid Year", JOptionPane.ERROR_MESSAGE);	
+				}
+				else {
+					try {
+						build.markStudent(studentCombo.getSelectedIndex(), moduleCombo.getSelectedIndex(), year, (typeCombo.getSelectedIndex()+1), markCombo.getSelectedIndex(), notesInput.getText());
+						markStudentFrame.dispose();
+						markStudentOpen = false;
+						JOptionPane.showMessageDialog(errorFrame, // then show an informative error message
+								("Marks for Student " + studentCombo.getSelectedItem() + " has been added!"),
+								"New Marks added", JOptionPane.INFORMATION_MESSAGE);
+					}
+					catch (Exception e1) {
+						JOptionPane.showMessageDialog(errorFrame, // then show an informative error message
+								"Failed to add Marks for Student!",
+								"Failed to add Marks for Student!", JOptionPane.ERROR_MESSAGE);
+						System.out.println("Failed to Marks for Student!");
+					}
+				}
+			}
+		});
+		
+		markStudentFrame.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				markStudentOpen = false; // the frame is no longer open
+			}
+		});
+		
+		// Step 7: Display the GUI
+		markStudentFrame.pack(); // pack the report frame
+		centreWindow(markStudentFrame); // centre the report frame
+		markStudentFrame.setVisible(true); // and make it visible
+		
 	}
 	
 	public void moduleTranscript() {

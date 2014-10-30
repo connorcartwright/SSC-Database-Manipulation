@@ -66,7 +66,7 @@ public class PopulateTables {
 			switch(i) { // first case adds in realistic data set
 				case 0: sql = "INSERT INTO Module (moduleName, moduleDescription, lecturerID) VALUES ('Software Workshop 1', 'Java Module 1...', 6), "
 						+ "('Software Workshop 2', 'Java Module 2...', 6),  ('Robot Programming', 'Learn to Program robots...', 8), "
-						+ "('AI', 'AI Module...', 5), ('Sofware Engineering', 'Engineer Software...', 7), "; break;
+						+ "('AI', 'AI Module...', 5), ('Software Engineering', 'Engineer Software...', 7), "; break;
 				case 49: sql += "('Module" + (i + 5) + "', 'Generic Description', '9');"; break;
 				default: sql += "('Module" + (i + 5) + "', 'Generic Description', '9'), "; break;
 			}
