@@ -8,6 +8,7 @@ public class Build {
 	private BuildTables createTables;
 	
 	public static void main(String args[]) {
+		@SuppressWarnings("unused")
 		Build build = new Build();
 	}
 	

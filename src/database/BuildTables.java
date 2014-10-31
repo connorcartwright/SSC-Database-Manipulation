@@ -6,7 +6,7 @@ public class BuildTables {
 	
 	// individual sql strings for each table to be executed
 	private String createLecturer = "CREATE TABLE Lecturer (lecturerID SERIAL PRIMARY KEY, titleID int REFERENCES Titles ON DELETE CASCADE, foreName varchar(30) NOT NULL, familyName varchar(30) NOT NULL);";
-	private String createMarks = "CREATE TABLE Marks (studentID int REFERENCES Student ON DELETE CASCADE, moduleID int REFERENCES Module ON DELETE CASCADE, year int CHECK (year BETWEEN 1980 AND 2014), typeID int REFERENCES Types ON DELETE CASCADE, mark smallint CHECK (mark BETWEEN 0 AND 100) NOT NULL, notes text);";
+	private String createMarks = "CREATE TABLE Marks (studentID int REFERENCES Student ON DELETE CASCADE, moduleID int REFERENCES Module ON DELETE CASCADE, year int CHECK (year BETWEEN 1980 AND 2014) NOT NULL, typeID int REFERENCES Types ON DELETE CASCADE, mark smallint CHECK (mark BETWEEN 0 AND 100) NOT NULL, notes text);";
 	private String createModule = "CREATE TABLE Module (moduleID SERIAL PRIMARY KEY, moduleName varchar(100) UNIQUE NOT NULL, moduleDescription text NOT NULL, lecturerID int REFERENCES Lecturer ON DELETE CASCADE);";
 	private String createNextOfKin = "CREATE TABLE NextOfKinContact (studentID int REFERENCES Student ON DELETE CASCADE, eMailAddress varchar(50) NOT NULL, postalAddress varchar(10) NOT NULL);";
 	private String createStudent = "CREATE TABLE Student (studentID SERIAL PRIMARY KEY, titleID int REFERENCES Titles ON DELETE CASCADE, forename varchar(30) NOT NULL, familyName varchar(30) NOT NULL, dateOfBirth date);";
