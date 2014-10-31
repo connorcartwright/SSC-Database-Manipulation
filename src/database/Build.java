@@ -21,7 +21,7 @@ public class Build {
 		createTables.createTables();
 		try {
 			dbConn.commit();
-			System.out.println("Commited Table creation!");
+			System.out.println("Committed Table creation!");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -31,7 +31,7 @@ public class Build {
 		createTables.populateTables();
 		try {
 			dbConn.commit();
-			System.out.println("Commited Table population!");
+			System.out.println("Committed Table population!");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -41,7 +41,7 @@ public class Build {
 		createTables.clearDatabase();
 		try {
 			dbConn.commit();
-			System.out.println("Commited database flush!");
+			System.out.println("Committed database flush!");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
