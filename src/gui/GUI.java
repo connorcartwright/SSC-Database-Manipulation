@@ -526,11 +526,214 @@ public class GUI {
 	}
 	
 	public void moduleTranscript() {
-		// code to display module transcript
+		moduleTranscriptOpen = true;
+		String [] modules = build.getAllModules();
+		// Step 1: create the components
+		final JFrame moduleTranscriptFrame = new JFrame("Module Transcript");
+		JButton produceReportButton = new JButton("Produce Report");
+		JButton closeButton = new JButton("Close");
+		
+		JComboBox<String> moduleCombo = new JComboBox<String>(modules); // initialising the combo box
+		JTextField yearInput = new JTextField();
+		
+		JLabel moduleLabel = new JLabel("Module: ");
+		JLabel yearLabel = new JLabel("Year: ");
+		
+		// Step 2: Set the properties of the components
+		produceReportButton.setToolTipText("Add a new Student to the database");
+		closeButton.setToolTipText("Close this window.");
+		yearInput.setBorder(BorderFactory.createLineBorder(Color.BLUE, 1));
+		yearInput.setColumns(8);
+		
+		// Step 3: Create containers to hold the components
+		moduleTranscriptFrame.setPreferredSize(new Dimension(280, 160));
+		moduleTranscriptFrame.setResizable(false); // make it so the frame can't be resized
+		moduleTranscriptFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE); // setting default close operation
+		
+		JPanel topPanel = new JPanel();
+		JPanel bottomPanel = new JPanel();
+		JPanel centrePanel = new JPanel();
+		JPanel modulePanel = new JPanel();
+		JPanel yearPanel = new JPanel();
+		
+		// Step 4: Specify LayoutManagers
+		moduleTranscriptFrame.getContentPane().setLayout(new BorderLayout()); // setting the layout for the report frame
+		((JComponent) moduleTranscriptFrame.getContentPane()).setBorder(new EmptyBorder(padding, padding, padding, padding));
+		
+		topPanel.setLayout(new BorderLayout()); // setting the layout for the panel holding the text
+		topPanel.setBorder(new EmptyBorder(padding, padding, padding, padding));
+		centrePanel.setLayout(new BorderLayout()); // setting the layout for the panel holding the text
+		centrePanel.setBorder(new EmptyBorder(padding, padding, padding, padding));
+		bottomPanel.setLayout(new BorderLayout()); // setting the layout for the panel holding the text
+		bottomPanel.setBorder(new EmptyBorder(padding, padding, padding, padding));
+		
+		// Step 5: Add components to containers
+		modulePanel.add(moduleLabel, BorderLayout.WEST);
+		modulePanel.add(moduleCombo, BorderLayout.EAST);
+		yearPanel.add(yearLabel, BorderLayout.WEST);
+		yearPanel.add(yearInput, BorderLayout.EAST);
+		
+		topPanel.add(modulePanel, BorderLayout.CENTER);
+		centrePanel.add(yearPanel, BorderLayout.CENTER);
+		bottomPanel.add(produceReportButton, BorderLayout.WEST);
+		bottomPanel.add(closeButton, BorderLayout.EAST);
+		
+		moduleTranscriptFrame.getContentPane().add(topPanel, BorderLayout.NORTH);
+		moduleTranscriptFrame.getContentPane().add(centrePanel, BorderLayout.CENTER);
+		moduleTranscriptFrame.getContentPane().add(bottomPanel, BorderLayout.SOUTH);
+		
+		// Step 6: Arrange to handle events in the user interface
+		closeButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				moduleTranscriptFrame.dispose(); // close the window and switch focus back to the mainframe
+				moduleTranscriptOpen = false; // the frame is no longer open
+			}
+		});
+		
+		produceReportButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int year = 0;
+				try {
+					year = Integer.parseInt(yearInput.getText());
+				}
+				catch (Exception e1) {
+					JOptionPane.showMessageDialog(errorFrame, // then show an informative error message
+							"Invalid Year entered.",
+							"Invalid Year", JOptionPane.ERROR_MESSAGE);	
+				}
+				
+				if(moduleCombo.getSelectedIndex() < 1) {
+					JOptionPane.showMessageDialog(errorFrame, // then show an informative error message
+							"No Module Selected.",
+							"No Module", JOptionPane.ERROR_MESSAGE);	
+				}
+				else if(year > 2014 || year < 1980) {
+					JOptionPane.showMessageDialog(errorFrame, // then show an informative error message
+							"Invalid Year entered.",
+							"Invalid Year", JOptionPane.ERROR_MESSAGE);	
+				}
+				else {
+					try {
+						build.moduleTranscript(moduleCombo.getSelectedIndex(), year);
+						moduleTranscriptFrame.dispose();
+						moduleTranscriptOpen = false;
+						JOptionPane.showMessageDialog(errorFrame, // then show an informative error message
+								("The Module report has been printed to the console!"),
+								"Report Printed", JOptionPane.INFORMATION_MESSAGE);
+					}
+					catch (Exception e1) {
+						JOptionPane.showMessageDialog(errorFrame, // then show an informative error message
+								"Failed to Produce Module Transcript Report!",
+								"Failed to Produce Module Report", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+				}
+		});
+		
+		
+		moduleTranscriptFrame.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				moduleTranscriptOpen = false; // the frame is no longer open
+			}
+		});
+		
+		// Step 7: Display the GUI
+		moduleTranscriptFrame.pack(); // pack the report frame
+		centreWindow(moduleTranscriptFrame); // centre the report frame
+		moduleTranscriptFrame.setVisible(true); // and make it visible
+			
 	}
 	
 	public void studentTranscript() {
-		// code to display student transcript
+		studentTranscriptOpen = true;
+		String [] students = build.getAllStudents();
+		final JFrame studentTranscriptFrame = new JFrame("Student Transcript");
+		JButton produceReportButton = new JButton("Produce Report");
+		JButton closeButton = new JButton("Close");
+		
+		JComboBox<String> studentCombo = new JComboBox<String>(students); // initialising the combo box
+		JLabel studentLabel = new JLabel("Student: ");
+		
+		// Step 2: Set the properties of the components
+		produceReportButton.setToolTipText("Add a new Student to the database");
+		closeButton.setToolTipText("Close this window.");
+			
+		// Step 3: Create containers to hold the components
+		studentTranscriptFrame.setPreferredSize(new Dimension(250, 120));
+		studentTranscriptFrame.setResizable(false); // make it so the frame can't be resized
+		studentTranscriptFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE); // setting default close operation
+		
+		JPanel topPanel = new JPanel();
+		JPanel bottomPanel = new JPanel();
+		JPanel studentPanel = new JPanel();
+		JPanel buttonPanel = new JPanel();
+		
+		// Step 4: Specify LayoutManagers
+		studentTranscriptFrame.getContentPane().setLayout(new BorderLayout()); // setting the layout for the report frame
+		((JComponent) studentTranscriptFrame.getContentPane()).setBorder(new EmptyBorder(padding, padding, padding, padding));
+		
+		topPanel.setLayout(new BorderLayout()); // setting the layout for the panel holding the text
+		topPanel.setBorder(new EmptyBorder(padding, padding, padding, padding));
+		bottomPanel.setLayout(new BorderLayout()); // setting the layout for the panel holding the text
+		bottomPanel.setBorder(new EmptyBorder(padding, padding, padding, padding));
+		
+		// Step 5: Add components to containers
+		studentPanel.add(studentLabel, BorderLayout.WEST);
+		studentPanel.add(studentCombo, BorderLayout.EAST);
+		
+		buttonPanel.add(produceReportButton, BorderLayout.WEST);
+		buttonPanel.add(closeButton, BorderLayout.EAST);
+		
+		topPanel.add(studentPanel, BorderLayout.CENTER);
+		bottomPanel.add(buttonPanel, BorderLayout.CENTER);
+		
+		studentTranscriptFrame.getContentPane().add(topPanel, BorderLayout.NORTH);
+		studentTranscriptFrame.getContentPane().add(bottomPanel, BorderLayout.SOUTH);
+		
+		// Step 6: Arrange to handle events in the user interface
+		closeButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				studentTranscriptFrame.dispose(); // close the window and switch focus back to the mainframe
+				studentTranscriptOpen = false; // the frame is no longer open
+			}
+		});
+		
+		produceReportButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if(studentCombo.getSelectedIndex() < 1) {
+					JOptionPane.showMessageDialog(errorFrame, // then show an informative error message
+							"No Student Selected.",
+							"No Student", JOptionPane.ERROR_MESSAGE);	
+				}
+				else {
+					try {
+						build.studentTranscript(studentCombo.getSelectedIndex());
+						studentTranscriptFrame.dispose();
+						studentTranscriptOpen = false;
+						JOptionPane.showMessageDialog(errorFrame, // then show an informative error message
+								("The Student's report has been printed to the console!"),
+								"Student Report Printed", JOptionPane.INFORMATION_MESSAGE);
+					}
+					catch (Exception e1) {
+						JOptionPane.showMessageDialog(errorFrame, // then show an informative error message
+								"Failed to Produce Student Transcript Report!",
+								"Failed to Produce Student Report", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+				}
+		});
+		
+		studentTranscriptFrame.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				studentTranscriptOpen = false; // the frame is no longer open
+			}
+		});
+		
+		// Step 7: Display the GUI
+		studentTranscriptFrame.pack(); // pack the report frame
+		centreWindow(studentTranscriptFrame); // centre the report frame
+		studentTranscriptFrame.setVisible(true); // and make it visible
 	}
 	
 	public void createTables() {
