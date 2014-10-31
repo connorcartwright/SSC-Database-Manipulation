@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -131,7 +132,14 @@ public class GUI {
 					// do nothing if the frame is already open
 				}
 				else {
-					registerStudent(); // open the frame to register a student;
+					if(build.isPopulated()) {
+					registerStudent(); // open the frame to register a student
+					}
+					else {
+						JOptionPane.showMessageDialog(errorFrame, // then show an informative error message
+								"The database is currently empty, please populate it!",
+								"Database empty.", JOptionPane.ERROR_MESSAGE);	
+					}
 				}
 			}
 		});	
@@ -142,7 +150,14 @@ public class GUI {
 					// do nothing if the frame is already open
 				}
 				else {
-					markStudent(); // open the frame to register a student;
+					if(build.isPopulated()) {
+					markStudent(); // open the frame to mark a student
+					}
+					else {
+						JOptionPane.showMessageDialog(errorFrame, // then show an informative error message
+								"The database is currently empty, please populate it!",
+								"Database empty.", JOptionPane.ERROR_MESSAGE);	
+					}
 				}
 			}
 		});
@@ -153,7 +168,14 @@ public class GUI {
 					// do nothing if the frame is already open
 				}
 				else {
-					moduleTranscript(); // open the frame to register a student;
+					if(build.isPopulated()) {
+					moduleTranscript(); // open the frame to produce module transcript
+					}
+					else {
+						JOptionPane.showMessageDialog(errorFrame, // then show an informative error message
+								"The database is currently empty, please populate it!",
+								"Database empty.", JOptionPane.ERROR_MESSAGE);	
+					}
 				}
 			}
 		});
@@ -164,7 +186,14 @@ public class GUI {
 					// do nothing if the frame is already open
 				}
 				else {
-					studentTranscript(); // open the frame to register a student;
+					if(build.isPopulated()) {
+					studentTranscript(); // open the frame to produce student transcript
+					}
+					else {
+						JOptionPane.showMessageDialog(errorFrame, // then show an informative error message
+								"The database is currently empty, please populate it!",
+								"Database empty.", JOptionPane.ERROR_MESSAGE);	
+					}
 				}
 			}
 		});
@@ -283,14 +312,6 @@ public class GUI {
 		
 		addStudentButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Boolean dateError = false;
-				
-			    try {
-			      dateFormat.parse(dateInput.getText().trim());
-			      dateError = false;
-			    } catch (ParseException pe) {
-			    	dateError = true;
-			    }
 				if (forenameInput.getText().length() > 30 || forenameInput.getText().length() < 1) {
 					JOptionPane.showMessageDialog(errorFrame, // then show an informative error message
 							"The Forename text cannot be more than 30 characters, or less than 1 character.",
@@ -301,7 +322,7 @@ public class GUI {
 							"The Surname text cannot be more than 30 characters, or less than 1 character.",
 							"String size error", JOptionPane.ERROR_MESSAGE);	
 				}
-				else if (dateError) {
+				else if (! isValidDate(dateInput.getText())) {
 					JOptionPane.showMessageDialog(errorFrame, // then show an informative error message
 							"Invalid date.",
 							"Bad date.", JOptionPane.ERROR_MESSAGE);
@@ -763,4 +784,22 @@ public class GUI {
 		frame.setLocation(x, y);
 	}
 
+	private static boolean isValidDate(String date) {
+	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	    dateFormat.setLenient(false);
+	    
+	    try {
+	      dateFormat.parse(date);
+	      Date min = java.sql.Date.valueOf("1969-12-31");
+	      Date max = java.sql.Date.valueOf("1997-12-31");
+	      Date d = java.sql.Date.valueOf(date);
+
+	      return d.after(min) && d.before(max);    
+	    }
+	    
+	    catch (ParseException e) {
+	      return false;
+	    }
+	  }
+	
 }
