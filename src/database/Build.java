@@ -229,4 +229,20 @@ public class Build {
 		}
 		return 0;
 	}
+	
+	public boolean isPopulated() {
+		try {
+			PreparedStatement stmt = dbConn.prepareStatement("SELECT * FROM Titles");
+			stmt.execute();
+			dbConn.commit();
+			return true;
+		} catch (SQLException e) {
+			try {
+				dbConn.commit();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			return false;
+		}
+	}
 }

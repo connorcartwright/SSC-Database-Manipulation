@@ -23,7 +23,7 @@ public class GUI {
 	private Integer[] mark = new Integer[101]; { for(int i = 0; i < 101; i++) { mark[i] = i; } };
 	private static final int padding = 5; // blank space for layout management
 	private Component errorFrame; // used when producing the error message
-	private boolean tablesCreatedPopulated, registerStudentOpen, markStudentOpen, moduleTranscriptOpen, studentTranscriptOpen = false; // initialising so that we know whether the frames are open
+	private boolean registerStudentOpen, markStudentOpen, moduleTranscriptOpen, studentTranscriptOpen = false; // initialising so that we know whether the frames are open
 	private Build build;
 	
 	
@@ -100,29 +100,27 @@ public class GUI {
 		// Step 6: Arrange to handle events in the user interface
 		createPopulate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(tablesCreatedPopulated) {
+				if(build.isPopulated()) {
 					JOptionPane.showMessageDialog(errorFrame, // then show an informative error message
 							"The Tables are already Created/Populated!",
 							"Already Created/Populated.", JOptionPane.ERROR_MESSAGE);	
 				}
 				else {
-					createTables();
-					populateTables();
-					tablesCreatedPopulated = true;
+					build.createTables();
+					build.populateTables();
 				}
 			}
 		});	
 		
 		clearDatabase.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(! tablesCreatedPopulated) {
+				if(! build.isPopulated()) {
 					JOptionPane.showMessageDialog(errorFrame, // then show an informative error message
 							"The database is already empty!",
 							"Database already empty.", JOptionPane.ERROR_MESSAGE);	
 				}
 				else {
-					clearDatabase();
-					tablesCreatedPopulated = false;
+					build.clearDatabase();
 				}
 			}
 		});
@@ -734,18 +732,6 @@ public class GUI {
 		studentTranscriptFrame.pack(); // pack the report frame
 		centreWindow(studentTranscriptFrame); // centre the report frame
 		studentTranscriptFrame.setVisible(true); // and make it visible
-	}
-	
-	public void createTables() {
-		build.createTables();
-	}
-	
-	public void populateTables() {
-		build.populateTables();
-	}
-	
-	public void clearDatabase() {
-		build.clearDatabase();
 	}
 	
 	/**
